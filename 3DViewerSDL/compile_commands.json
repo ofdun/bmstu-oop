@@ -1,0 +1,50 @@
+[
+{
+  "directory": "/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/build/osx-debug",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/inc -iframework /Users/eliseykalashnikov/Library/Frameworks/SDL3.xcframework/macos-arm64_x86_64 -g -std=gnu++20 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.6 -F /Users/eliseykalashnikov/Library/Frameworks/SDL3.xcframework/macos-arm64_x86_64 -o CMakeFiles/viewer.exe.dir/src/main.cpp.o -c /Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/src/main.cpp",
+  "file": "/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/src/main.cpp",
+  "output": "CMakeFiles/viewer.exe.dir/src/main.cpp.o"
+},
+{
+  "directory": "/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/build/osx-debug",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/inc -iframework /Users/eliseykalashnikov/Library/Frameworks/SDL3.xcframework/macos-arm64_x86_64 -g -std=gnu++20 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.6 -F /Users/eliseykalashnikov/Library/Frameworks/SDL3.xcframework/macos-arm64_x86_64 -o CMakeFiles/viewer.exe.dir/src/validators.cpp.o -c /Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/src/validators.cpp",
+  "file": "/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/src/validators.cpp",
+  "output": "CMakeFiles/viewer.exe.dir/src/validators.cpp.o"
+},
+{
+  "directory": "/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/build/osx-debug",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/inc -iframework /Users/eliseykalashnikov/Library/Frameworks/SDL3.xcframework/macos-arm64_x86_64 -g -std=gnu++20 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.6 -F /Users/eliseykalashnikov/Library/Frameworks/SDL3.xcframework/macos-arm64_x86_64 -o CMakeFiles/viewer.exe.dir/src/graph.cpp.o -c /Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/src/graph.cpp",
+  "file": "/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/src/graph.cpp",
+  "output": "CMakeFiles/viewer.exe.dir/src/graph.cpp.o"
+},
+{
+  "directory": "/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/build/osx-debug",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/inc -iframework /Users/eliseykalashnikov/Library/Frameworks/SDL3.xcframework/macos-arm64_x86_64 -g -std=gnu++20 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.6 -F /Users/eliseykalashnikov/Library/Frameworks/SDL3.xcframework/macos-arm64_x86_64 -o CMakeFiles/viewer.exe.dir/src/graphics.cpp.o -c /Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/src/graphics.cpp",
+  "file": "/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/src/graphics.cpp",
+  "output": "CMakeFiles/viewer.exe.dir/src/graphics.cpp.o"
+},
+{
+  "directory": "/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/build/osx-debug",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/inc -iframework /Users/eliseykalashnikov/Library/Frameworks/SDL3.xcframework/macos-arm64_x86_64 -g -std=gnu++20 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.6 -F /Users/eliseykalashnikov/Library/Frameworks/SDL3.xcframework/macos-arm64_x86_64 -o CMakeFiles/viewer.exe.dir/src/transform.cpp.o -c /Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/src/transform.cpp",
+  "file": "/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/src/transform.cpp",
+  "output": "CMakeFiles/viewer.exe.dir/src/transform.cpp.o"
+},
+{
+  "directory": "/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/build/osx-debug",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/inc -iframework /Users/eliseykalashnikov/Library/Frameworks/SDL3.xcframework/macos-arm64_x86_64 -g -std=gnu++20 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.6 -F /Users/eliseykalashnikov/Library/Frameworks/SDL3.xcframework/macos-arm64_x86_64 -o CMakeFiles/viewer.exe.dir/src/point.cpp.o -c /Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/src/point.cpp",
+  "file": "/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/src/point.cpp",
+  "output": "CMakeFiles/viewer.exe.dir/src/point.cpp.o"
+},
+{
+  "directory": "/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/build/osx-debug",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/inc -iframework /Users/eliseykalashnikov/Library/Frameworks/SDL3.xcframework/macos-arm64_x86_64 -g -std=gnu++20 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.6 -F /Users/eliseykalashnikov/Library/Frameworks/SDL3.xcframework/macos-arm64_x86_64 -o CMakeFiles/viewer.exe.dir/src/transformGraph.cpp.o -c /Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/src/transformGraph.cpp",
+  "file": "/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/src/transformGraph.cpp",
+  "output": "CMakeFiles/viewer.exe.dir/src/transformGraph.cpp.o"
+},
+{
+  "directory": "/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/build/osx-debug",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/inc -iframework /Users/eliseykalashnikov/Library/Frameworks/SDL3.xcframework/macos-arm64_x86_64 -g -std=gnu++20 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.6 -F /Users/eliseykalashnikov/Library/Frameworks/SDL3.xcframework/macos-arm64_x86_64 -o CMakeFiles/viewer.exe.dir/src/app.cpp.o -c /Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/src/app.cpp",
+  "file": "/Users/eliseykalashnikov/Documents/BMSTU/oop/3Dviewer/src/app.cpp",
+  "output": "CMakeFiles/viewer.exe.dir/src/app.cpp.o"
+}
+]

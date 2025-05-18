@@ -1,0 +1,36 @@
+#ifndef CONSTANTS_HPP
+#define CONSTANTS_HPP
+
+#define WINDOW_TITLE "3D Viewer"
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 800
+
+#define BACKGROUND_COLOR_R 0
+#define BACKGROUND_COLOR_G 0
+#define BACKGROUND_COLOR_B 0
+#define BACKGROUND_COLOR_ALPHA 255
+
+#define GRAPH_COLOR_R 255
+#define GRAPH_COLOR_G 255
+#define GRAPH_COLOR_B 255
+#define GRAPH_COLOR_ALPHA 255
+
+#define OFFSET_STEP 5
+#define ROTATION_STEP 0.05
+#define SCALE_STEP 0.98
+
+#define SCALE_X 100
+#define SCALE_Y 100
+#define SCALE_Z 100
+
+#define ROTATION_X 0
+#define ROTATION_Y 0
+#define ROTATION_Z 0
+
+#define OFFSET_X (WINDOW_WIDTH / 2.)
+#define OFFSET_Y (WINDOW_HEIGHT / 2.)
+#define OFFSET_Z 0
+
+#define DELAY 15
+
+#endif //CONSTANTS_HPP
