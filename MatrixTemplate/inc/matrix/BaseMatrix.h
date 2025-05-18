@@ -6,15 +6,15 @@
 class BaseMatrix
 {
 public:
-    using sizeType = size_t;
+    using size_type = size_t;
 
     virtual ~BaseMatrix() = default;
 
-    [[nodiscard]] virtual std::pair<sizeType, sizeType> size() const noexcept = 0;
+    [[nodiscard]] virtual size_type size() const noexcept = 0;
 
 protected:
-    sizeType rows = 0;
-    sizeType columns = 0;
+    size_t rows = 0;
+    size_t columns = 0;
 };
 
 #endif // BASEMATRIX_H

@@ -1,8 +1,6 @@
 #ifndef MATRIXCONCEPTS_H
 #define MATRIXCONCEPTS_H
 
-#include <concepts>
-
 template <typename T>
 concept Storable = std::semiregular<T>;
 
@@ -49,7 +47,7 @@ concept Divisible = requires(const T &t, const U &u)
 };
 
 template <typename T, typename U>
-concept DivisibleAssignable = Addable<T, U> && requires(const T &t, const U &u)
+concept DivisibleAssignable = Divisible<T, U> && requires(const T &t, const U &u)
 {
     std::is_assignable_v<T, decltype(t / u)>;
 };
@@ -114,9 +112,27 @@ concept LUComputable = HasZeroElement<T> && requires (const T &a, const T &b)
 };
 
 template <typename T>
+concept InvertComputable = HasIdentityElement<T> && LUComputable<T>;
+
+template <typename T>
 concept Outputable = requires (std::ostream &stream, const T &t)
 {
     { stream << t } -> std::same_as<std::ostream &>;
+};
+
+template <typename T>
+concept IdentityMatrixCompatible = HasZeroElement<T> && HasIdentityElement<T>;
+
+template <typename T, typename U>
+concept FloatingPointAny = std::is_floating_point_v<T> || std::is_floating_point_v<U>;
+
+template <typename T, typename U>
+concept MatrixDivisible = Divisible<T, U> && InvertComputable<U> && MatrixMultiplyable<U, T>;
+
+template <typename T, typename U>
+concept MatrixDivisibleAssignable = MatrixDivisible<T, U> && requires(const T &t, const U &u)
+{
+    std::is_assignable_v<T, decltype(t * u + t * u)>;
 };
 
 #endif //MATRIXCONCEPTS_H

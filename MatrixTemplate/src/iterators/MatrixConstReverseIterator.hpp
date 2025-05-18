@@ -6,14 +6,15 @@
 template <typename T>
 MatrixConstReverseIterator<T>::MatrixConstReverseIterator()
 {
-    forwardIterator = constIterator();
+    iter = const_iterator();
 }
 
 template <typename T>
 MatrixConstReverseIterator<T>::MatrixConstReverseIterator(const Matrix<value_type> &m)
 {
-    forwardIterator = constIterator(m);
-    std::tie(rows, columns) = m.size();
+    iter = const_iterator(m);
+    rows = m.getRows();
+    columns = m.getColumns();
     pos = rows * columns;
 }
 
@@ -23,27 +24,25 @@ MatrixConstReverseIterator<T>::MatrixConstReverseIterator(const MatrixConstRever
     pos = it.pos;
     rows = it.rows;
     columns = it.columns;
-    forwardIterator = it.forwardIterator;
-
-    return *this;
+    iter = it.iter;
 }
 
 template <typename T>
-typename MatrixConstReverseIterator<T>::constReference MatrixConstReverseIterator<T>::operator*() const
+typename MatrixConstReverseIterator<T>::const_reference MatrixConstReverseIterator<T>::operator*() const
 {
     return *get();
 }
 
 template <typename T>
-typename MatrixConstReverseIterator<T>::constPointer MatrixConstReverseIterator<T>::operator->() const
+typename MatrixConstReverseIterator<T>::const_pointer MatrixConstReverseIterator<T>::operator->() const
 {
     return get();
 }
 
 template <typename T>
-typename MatrixConstReverseIterator<T>::constReference MatrixConstReverseIterator<T>::operator[](sizeType index) const
+typename MatrixConstReverseIterator<T>::const_reference MatrixConstReverseIterator<T>::operator[](difference_type index) const
 {
-    return forwardIterator[rows * columns - index - 1];
+    return iter[rows * columns - index - 1];
 }
 
 template <typename T>
@@ -52,7 +51,7 @@ MatrixConstReverseIterator<T> & MatrixConstReverseIterator<T>::operator=(const M
     pos = it.pos;
     rows = it.rows;
     columns = it.columns;
-    forwardIterator = it.forwardIterator;
+    iter = it.iter;
 
     return *this;
 }
@@ -62,7 +61,7 @@ MatrixConstReverseIterator<T> MatrixConstReverseIterator<T>::operator+(differenc
 {
     MatrixConstReverseIterator it(*this);
 
-    it.forwardIterator -= n;
+    it.iter -= n;
 
     return it;
 }
@@ -80,7 +79,7 @@ MatrixConstReverseIterator<T> MatrixConstReverseIterator<T>::operator-(differenc
 {
     MatrixConstReverseIterator it(*this);
 
-    it.forwardIterator += n;
+    it.iter += n;
 
     return it;
 }
@@ -104,7 +103,9 @@ MatrixConstReverseIterator<T> & MatrixConstReverseIterator<T>::operator++() noex
 template <typename T>
 MatrixConstReverseIterator<T> MatrixConstReverseIterator<T>::operator++(int) noexcept
 {
-    return ++*this;
+    MatrixConstReverseIterator copy(*this);
+    ++*this;
+    return copy;
 }
 
 template <typename T>
@@ -118,20 +119,22 @@ MatrixConstReverseIterator<T> & MatrixConstReverseIterator<T>::operator--() noex
 template <typename T>
 MatrixConstReverseIterator<T> MatrixConstReverseIterator<T>::operator--(int) noexcept
 {
-    return --*this;
+    MatrixConstReverseIterator copy(*this);
+    --*this;
+    return copy;
 }
 
 template <typename T>
 typename MatrixConstReverseIterator<T>::difference_type MatrixConstReverseIterator<T>::operator-(
-    const MatrixConstReverseIterator &it) const
+    const MatrixConstReverseIterator &it) const noexcept
 {
-    return it.forwardIterator - forwardIterator;
+    return it.iter - iter;
 }
 
 template <typename T>
 MatrixConstReverseIterator<T>::operator bool() const noexcept
 {
-    return static_cast<bool>(forwardIterator);
+    return static_cast<bool>(iter);
 }
 
 template <typename T>
@@ -143,13 +146,13 @@ std::strong_ordering MatrixConstReverseIterator<T>::operator<=>(const MatrixCons
 template <typename T>
 bool MatrixConstReverseIterator<T>::operator==(const MatrixConstReverseIterator &it) const noexcept
 {
-    return pos == it.pos;
+    return pos == it.pos && iter == it.iter;
 }
 
 template <typename T>
 typename MatrixConstReverseIterator<T>::pointer MatrixConstReverseIterator<T>::get() const
 {
-    return (forwardIterator + static_cast<difference_type>(pos) - difference_type{1}).operator->();
+    return (iter + static_cast<difference_type>(pos) - difference_type{1}).operator->();
 }
 
 #endif //MATRIXCONSTREVERSEITERATOR_HPP

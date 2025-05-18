@@ -14,6 +14,7 @@ public:
     using pointer = T *;
     using reference = T &;
     using difference_type = std::ptrdiff_t;
+    using iterator_category = std::random_access_iterator_tag;
 
     MatrixIterator();
     explicit MatrixIterator(Matrix<value_type> &m);
@@ -21,9 +22,12 @@ public:
 
     ~MatrixIterator() override = default;
 
-    reference operator*() const;
-    pointer operator->() const;
-    reference operator[](difference_type index) const;
+    reference operator*();
+    const reference operator*() const;
+    pointer operator->();
+    const pointer operator->() const;
+    reference operator[](difference_type index);
+    const reference operator[](difference_type index) const;
 
     MatrixIterator &operator=(const MatrixIterator &it) noexcept;
 
@@ -37,20 +41,18 @@ public:
     MatrixIterator &operator--() noexcept;
     MatrixIterator operator--(int) noexcept;
 
-    difference_type operator-(const MatrixIterator &it) const;
+    difference_type operator-(const MatrixIterator &it) const noexcept;
 
     operator bool() const noexcept;
 
     std::strong_ordering operator<=>(const MatrixIterator &it) const noexcept;
     bool operator==(const MatrixIterator &it) const noexcept;
 
-protected:
-    pointer get() const;
-    
 private:
+    pointer get() const;
     std::weak_ptr<T[]> ptr;
     
-    void validateInBounds(const char* filename, const char* funcName, int line) const;
+    void validateInBounds(difference_type index, const char* filename, const char* funcName, int line) const;
     void validateExpired(const char* filename, const char* funcName, int line) const;
 };
 

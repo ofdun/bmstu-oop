@@ -13,7 +13,8 @@ template <typename T>
 MatrixReverseIterator<T>::MatrixReverseIterator(Matrix<value_type> &m)
 {
     forwardIterator = iterator(m);
-    std::tie(rows, columns) = m.size();
+    rows = m.getRows();
+    columns = m.getColumns();
     pos = rows * columns;
 }
 
@@ -75,7 +76,9 @@ MatrixReverseIterator<T> &MatrixReverseIterator<T>::operator++() noexcept
 template <typename T>
 MatrixReverseIterator<T> MatrixReverseIterator<T>::operator++(int) noexcept
 {
-    return ++*this;
+    MatrixReverseIterator copy(*this);
+    ++*this;
+    return copy;
 }
 
 template <typename T>
@@ -89,12 +92,14 @@ MatrixReverseIterator<T> &MatrixReverseIterator<T>::operator--() noexcept
 template <typename T>
 MatrixReverseIterator<T> MatrixReverseIterator<T>::operator--(int) noexcept
 {
-    return --*this;
+    MatrixReverseIterator copy(*this);
+    --*this;
+    return copy;
 }
 
 template <typename T>
 typename MatrixReverseIterator<T>::difference_type MatrixReverseIterator<T>::operator-(
-    const MatrixReverseIterator &it) const
+    const MatrixReverseIterator &it) const noexcept
 {
     return it.forwardIterator - forwardIterator;
 }
@@ -114,7 +119,7 @@ std::strong_ordering MatrixReverseIterator<T>::operator<=>(const MatrixReverseIt
 template <typename T>
 bool MatrixReverseIterator<T>::operator==(const MatrixReverseIterator &it) const noexcept
 {
-    return pos == it.pos;
+    return pos == it.pos && forwardIterator == it.forwardIterator;
 }
 
 template <typename T>
@@ -146,7 +151,7 @@ typename MatrixReverseIterator<T>::pointer MatrixReverseIterator<T>::operator->(
 }
 
 template <typename T>
-typename MatrixReverseIterator<T>::reference MatrixReverseIterator<T>::operator[](sizeType index) const
+typename MatrixReverseIterator<T>::reference MatrixReverseIterator<T>::operator[](difference_type index) const
 {
     return forwardIterator[rows * columns - index - 1];
 }

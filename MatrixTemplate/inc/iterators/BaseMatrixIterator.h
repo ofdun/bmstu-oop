@@ -6,14 +6,14 @@
 class BaseMatrixIterator
 {
 public:
-    using sizeType = size_t;
+    using size_type = size_t;
 
     virtual ~BaseMatrixIterator() = 0;
 
 protected:
-    sizeType columns = 0;
-    sizeType rows = 0;
-    sizeType pos = 0;
+    size_type columns = 0;
+    size_type rows = 0;
+    size_type pos = 0;
 };
 
 #endif // BASEMATRIXITERATOR_H

@@ -15,10 +15,11 @@ template <typename T> class MatrixReverseIterator final : public BaseMatrixItera
 {
 public:
     using value_type = T;
-    using pointer = const T *;
-    using reference = const T &;
+    using pointer = T *;
+    using reference = T &;
     using iterator = MatrixIterator<T>;
     using difference_type = std::ptrdiff_t;
+    using iterator_category = std::random_access_iterator_tag;
     
     MatrixReverseIterator();
     explicit MatrixReverseIterator(Matrix<value_type> &m);
@@ -28,7 +29,7 @@ public:
 
     reference operator*() const;
     pointer operator->() const;
-    reference operator[](sizeType index) const;
+    reference operator[](difference_type index) const;
 
     MatrixReverseIterator &operator=(const MatrixReverseIterator &it) noexcept;
     
@@ -42,17 +43,15 @@ public:
     MatrixReverseIterator &operator--() noexcept;
     MatrixReverseIterator operator--(int) noexcept;
     
-    difference_type operator-(const MatrixReverseIterator &it) const;
+    difference_type operator-(const MatrixReverseIterator &it) const noexcept;
     
     operator bool() const noexcept;
     
     std::strong_ordering operator<=>(const MatrixReverseIterator &it) const noexcept;
     bool operator==(const MatrixReverseIterator &it) const noexcept;
 
-protected:
-    pointer get() const;
-
 private:
+    pointer get() const;
     iterator forwardIterator;
 };
 

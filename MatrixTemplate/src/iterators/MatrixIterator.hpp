@@ -4,26 +4,54 @@
 #include "IteratorExceptions.h"
 #include "MatrixIterator.h"
 
-template <typename T> typename MatrixIterator<T>::reference MatrixIterator<T>::operator[](difference_type index) const
+template <typename T> typename MatrixIterator<T>::reference MatrixIterator<T>::operator[](difference_type index)
 {
-    validateInBounds(__FILE__, __FUNCTION__, __LINE__);
+    validateInBounds(index + pos, __FILE__, __FUNCTION__, __LINE__);
     validateExpired(__FILE__, __FUNCTION__, __LINE__);
     
     auto sharedPtr = ptr.lock();
     return *(sharedPtr.get() + index);
 }
 
-template <typename T> typename MatrixIterator<T>::reference MatrixIterator<T>::operator*() const
+template <typename T>
+const typename MatrixIterator<T>::reference MatrixIterator<T>::operator[](difference_type index) const
 {
-    validateInBounds(__FILE__, __FUNCTION__, __LINE__);
+    validateInBounds(index + pos, __FILE__, __FUNCTION__, __LINE__);
+    validateExpired(__FILE__, __FUNCTION__, __LINE__);
+    
+    auto sharedPtr = ptr.lock();
+    return *(sharedPtr.get() + index);
+}
+
+template <typename T> typename MatrixIterator<T>::reference MatrixIterator<T>::operator*()
+{
+    validateInBounds(pos, __FILE__, __FUNCTION__, __LINE__);
     validateExpired(__FILE__, __FUNCTION__, __LINE__);
     
     return *get();
 }
 
-template <typename T> typename MatrixIterator<T>::pointer MatrixIterator<T>::operator->() const
+template <typename T>
+const typename MatrixIterator<T>::reference MatrixIterator<T>::operator*() const
 {
-    validateInBounds(__FILE__, __FUNCTION__, __LINE__);
+    validateInBounds(pos, __FILE__, __FUNCTION__, __LINE__);
+    validateExpired(__FILE__, __FUNCTION__, __LINE__);
+    
+    return *get();
+}
+
+template <typename T> typename MatrixIterator<T>::pointer MatrixIterator<T>::operator->()
+{
+    validateInBounds(pos, __FILE__, __FUNCTION__, __LINE__);
+    validateExpired(__FILE__, __FUNCTION__, __LINE__);
+
+    return get();
+}
+
+template <typename T>
+const typename MatrixIterator<T>::pointer MatrixIterator<T>::operator->() const
+{
+    validateInBounds(pos, __FILE__, __FUNCTION__, __LINE__);
     validateExpired(__FILE__, __FUNCTION__, __LINE__);
 
     return get();
@@ -38,7 +66,9 @@ template <typename T> MatrixIterator<T> &MatrixIterator<T>::operator++() noexcep
 
 template <typename T> MatrixIterator<T> MatrixIterator<T>::operator++(int) noexcept
 {
-    return ++*this;
+    MatrixIterator copy(*this);
+    ++*this;
+    return copy;
 }
 
 template <typename T> MatrixIterator<T> &MatrixIterator<T>::operator--() noexcept
@@ -55,13 +85,15 @@ template <typename T> std::strong_ordering MatrixIterator<T>::operator<=>(const 
 
 template <typename T> MatrixIterator<T> MatrixIterator<T>::operator--(int) noexcept
 {
-    return --*this;
+    MatrixIterator copy(*this);
+    --*this;
+    return copy;
 }
 
 template <typename T>
-typename MatrixIterator<T>::difference_type MatrixIterator<T>::operator-(const MatrixIterator &it) const
+typename MatrixIterator<T>::difference_type MatrixIterator<T>::operator-(const MatrixIterator &it) const noexcept
 {
-    return get() - it.get();
+    return pos - it.pos;
 }
 
 template <typename T>
@@ -135,12 +167,12 @@ template <typename T> MatrixIterator<T>::MatrixIterator(const MatrixIterator &it
 
 template <typename T> bool MatrixIterator<T>::operator==(const MatrixIterator &it) const noexcept
 {
-    return pos == it.pos;
+    return pos == it.pos && ptr.lock().get() == it.ptr.lock().get();
 }
 
 template <typename T> T *MatrixIterator<T>::get() const
 {
-    validateInBounds(__FILE__, __FUNCTION__, __LINE__);
+    validateInBounds(pos, __FILE__, __FUNCTION__, __LINE__);
     validateExpired(__FILE__, __FUNCTION__, __LINE__);
     
     auto sharedPtr = ptr.lock();
@@ -148,9 +180,9 @@ template <typename T> T *MatrixIterator<T>::get() const
 }
 
 template <typename T>
-void MatrixIterator<T>::validateInBounds(const char* filename, const char* funcName, int line) const
+void MatrixIterator<T>::validateInBounds(difference_type index, const char* filename, const char* funcName, int line) const
 {
-    if (pos < 0 || pos > columns * rows)
+    if (index < 0 || index > columns * rows)
         throw OutOfBoundsException(filename, funcName, line, time(nullptr));
 }
 

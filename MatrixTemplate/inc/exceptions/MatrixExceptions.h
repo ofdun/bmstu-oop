@@ -73,4 +73,34 @@ public:
                          const char *text = "Invalid initializer list for a matrix!") : BaseException(filename, funcName, line, time, text) {}
 };
 
+class ImpossibleToMultiplyException final : public BaseException
+{
+public:
+    ImpossibleToMultiplyException(const char *filename,
+                         const char *funcName,
+                         int line,
+                         time_t time,
+                         const char *text = "Impossible to multiply such matrices!") : BaseException(filename, funcName, line, time, text) {}
+};
+
+class ImpossibleToDivideException final : public BaseException
+{
+public:
+    ImpossibleToDivideException(const char *filename,
+                         const char *funcName,
+                         int line,
+                         time_t time,
+                         const char *text = "Impossible to divide such matrices!") : BaseException(filename, funcName, line, time, text) {}
+};
+
+class NullptrArrayException final : public BaseException
+{
+public:
+    NullptrArrayException(const char *filename,
+                         const char *funcName,
+                         int line,
+                         time_t time,
+                         const char *text = "Can not create matrix from nullptr!") : BaseException(filename, funcName, line, time, text) {}
+};
+
 #endif //MATRIXEXCEPTIONS_H

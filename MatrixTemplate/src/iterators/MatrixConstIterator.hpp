@@ -32,7 +32,7 @@ template <typename T> MatrixConstIterator<T>::MatrixConstIterator(const MatrixCo
 
 template <typename T> typename MatrixConstIterator<T>::pointer MatrixConstIterator<T>::get() const
 {
-    validateInBounds(__FILE__, __FUNCTION__, __LINE__);
+    validateInBounds(pos, __FILE__, __FUNCTION__, __LINE__);
     validateExpired(__FILE__, __FUNCTION__, __LINE__);
     
     auto sharedPtr = ptr.lock();
@@ -76,7 +76,7 @@ template <typename T> MatrixConstIterator<T> MatrixConstIterator<T>::operator-(d
 
 template <typename T> bool MatrixConstIterator<T>::operator==(const MatrixConstIterator &it) const noexcept
 {
-    return pos == it.pos;
+    return pos == it.pos && ptr.lock().get() == it.ptr.lock().get();
 }
 
 template <typename T> MatrixConstIterator<T> &MatrixConstIterator<T>::operator++() noexcept
@@ -88,7 +88,9 @@ template <typename T> MatrixConstIterator<T> &MatrixConstIterator<T>::operator++
 
 template <typename T> MatrixConstIterator<T> MatrixConstIterator<T>::operator++(int) noexcept
 {
-    return ++*this;
+    MatrixConstIterator copy(*this);
+    ++*this;
+    return copy;
 }
 
 template <typename T> MatrixConstIterator<T> &MatrixConstIterator<T>::operator--() noexcept
@@ -100,13 +102,15 @@ template <typename T> MatrixConstIterator<T> &MatrixConstIterator<T>::operator--
 
 template <typename T> MatrixConstIterator<T> MatrixConstIterator<T>::operator--(int) noexcept
 {
-    return --*this;
+    MatrixConstIterator copy(*this);
+    --*this;
+    return copy;
 }
 
 template <typename T>
-typename MatrixConstIterator<T>::difference_type MatrixConstIterator<T>::operator-(const MatrixConstIterator &it) const
+typename MatrixConstIterator<T>::difference_type MatrixConstIterator<T>::operator-(const MatrixConstIterator &it) const noexcept
 {
-    return get() - it.get();
+    return pos - it.pos;
 }
 
 template <typename T>
@@ -122,26 +126,26 @@ template <typename T> MatrixConstIterator<T> &MatrixConstIterator<T>::operator-=
     return *this;
 }
 
-template <typename T> typename MatrixConstIterator<T>::constReference MatrixConstIterator<T>::operator*() const
+template <typename T> typename MatrixConstIterator<T>::const_reference MatrixConstIterator<T>::operator*() const
 {
-    validateInBounds(__FILE__, __FUNCTION__, __LINE__);
+    validateInBounds(pos, __FILE__, __FUNCTION__, __LINE__);
     validateExpired(__FILE__, __FUNCTION__, __LINE__);
     
     return *get();
 }
 
-template <typename T> typename MatrixConstIterator<T>::constPointer MatrixConstIterator<T>::operator->() const
+template <typename T> typename MatrixConstIterator<T>::const_pointer MatrixConstIterator<T>::operator->() const
 {
-    validateInBounds(__FILE__, __FUNCTION__, __LINE__);
+    validateInBounds(pos, __FILE__, __FUNCTION__, __LINE__);
     validateExpired(__FILE__, __FUNCTION__, __LINE__);
     
     return get();
 }
 
 template <typename T>
-void MatrixConstIterator<T>::validateInBounds(const char* filename, const char* funcName, int line) const
+void MatrixConstIterator<T>::validateInBounds(size_t index, const char* filename, const char* funcName, int line) const
 {
-    if (pos < 0 || pos > columns * rows)
+    if (index < 0 || index > columns * rows)
         throw OutOfBoundsException(filename, funcName, line, time(nullptr));
 }
 
@@ -152,9 +156,9 @@ void MatrixConstIterator<T>::validateExpired(const char* filename, const char* f
         throw ExpiredException(filename, funcName, line, time(nullptr));
 }
 
-template <typename T> const T &MatrixConstIterator<T>::operator[](int index) const
+template <typename T> const T &MatrixConstIterator<T>::operator[](difference_type index) const
 {
-    validateInBounds(__FILE__, __FUNCTION__, __LINE__);
+    validateInBounds(pos + index, __FILE__, __FUNCTION__, __LINE__);
     validateExpired(__FILE__, __FUNCTION__, __LINE__);
     
     auto sharedPtr = ptr.lock();

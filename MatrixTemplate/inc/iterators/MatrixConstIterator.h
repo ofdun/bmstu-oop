@@ -12,19 +12,20 @@ template <typename T> class MatrixConstIterator final : public BaseMatrixIterato
 public:
     using value_type = T;
     using pointer = const T *;
-    using constPointer = const T *;
-    using constReference = const T &;
+    using const_pointer = const T *;
+    using const_reference = const T &;
     using difference_type = std::ptrdiff_t;
-
+    using iterator_category = std::random_access_iterator_tag;
+    
     MatrixConstIterator();
     explicit MatrixConstIterator(const Matrix<T> &m);
     MatrixConstIterator(const MatrixConstIterator &it);
 
     ~MatrixConstIterator() override = default;
 
-    constReference operator*() const;
-    constPointer operator->() const;
-    constReference operator[](int index) const;
+    const_reference operator*() const;
+    const_pointer operator->() const;
+    const_reference operator[](difference_type index) const;
 
     MatrixConstIterator &operator=(const MatrixConstIterator &it) noexcept;
 
@@ -38,20 +39,18 @@ public:
     MatrixConstIterator &operator--() noexcept;
     MatrixConstIterator operator--(int) noexcept;
 
-    difference_type operator-(const MatrixConstIterator &it) const;
+    difference_type operator-(const MatrixConstIterator &it) const noexcept;
 
     operator bool() const noexcept;
 
     std::strong_ordering operator<=>(const MatrixConstIterator &it) const noexcept;
     bool operator==(const MatrixConstIterator &it) const noexcept;
 
-protected:
-    pointer get() const;
-
 private:
+    pointer get() const;
     std::weak_ptr<T[]> ptr;
 
-    void validateInBounds(const char *filename, const char *funcName, int line) const;
+    void validateInBounds(size_t index, const char *filename, const char *funcName, int line) const;
     void validateExpired(const char *filename, const char *funcName, int line) const;
 };
 

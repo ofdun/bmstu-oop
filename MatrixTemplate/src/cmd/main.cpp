@@ -19,7 +19,8 @@ TEST(InitMatrix, rowsCols)
 {
     Matrix<int> m(3, 4);
 
-    const auto [r_, c_] = m.size();
+    auto r_ = m.getRows();
+    auto c_ = m.getColumns();
     
     GTEST_ASSERT_EQ(r_, 3);
     GTEST_ASSERT_EQ(c_, 4);
@@ -35,7 +36,8 @@ TEST(InitMatrix, staticSquare)
 {
     auto m = Matrix<char>::initSquare(2);
 
-    const auto [r_, c_] = m.size();
+    auto r_ = m.getRows();
+    auto c_ = m.getColumns();
     
     GTEST_ASSERT_EQ(r_, 2);
     GTEST_ASSERT_EQ(c_, 2);
@@ -54,7 +56,8 @@ TEST(InitMatrix, staticZero)
     
     auto m = Matrix<type_>::initZero(rows, columns);
 
-    const auto [r_, c_] = m.size();
+    auto r_ = m.getRows();
+    auto c_ = m.getColumns();
     
     GTEST_ASSERT_EQ(r_, rows);
     GTEST_ASSERT_EQ(c_, columns);
@@ -73,7 +76,8 @@ TEST(InitMatrix, staticIdentity)
     
     auto m = Matrix<type_>::initIdentity(n);
 
-    const auto [r_, c_] = m.size();
+    auto r_ = m.getRows();
+    auto c_ = m.getColumns();
     
     GTEST_ASSERT_EQ(r_, n);
     GTEST_ASSERT_EQ(c_, n);
@@ -84,6 +88,30 @@ TEST(InitMatrix, staticIdentity)
                 GTEST_ASSERT_EQ(type_{0}, m[r][c]);
             else
                 GTEST_ASSERT_EQ(type_{1}, m[r][c]);
+    
+    std::cout << m;
+}
+
+TEST(InitMatrix, staticDiagonal)
+{
+    auto n = 3;
+    auto elem = 5.3;
+    using type_ = double;
+    
+    auto m = Matrix<type_>::initDiagonal(n, elem);
+
+    auto r_ = m.getRows();
+    auto c_ = m.getColumns();
+    
+    GTEST_ASSERT_EQ(r_, n);
+    GTEST_ASSERT_EQ(c_, n);
+
+    for (auto r = 0; r < n; r++)
+        for (auto c = 0; c < n; c++)
+            if (r != c)
+                GTEST_ASSERT_EQ(type_{0}, m[r][c]);
+            else
+                GTEST_ASSERT_EQ(type_{elem}, m[r][c]);
     
     std::cout << m;
 }
@@ -113,19 +141,6 @@ TEST(Redunant, negativeMatrix)
     for (auto r = 0; r < 2; r++)
         for (auto c = 0; c < 3; c++)
             GTEST_ASSERT_EQ(m3[r][c], m2[r][c]);
-    
-    std::cout << m2;
-}
-
-TEST(Arithmetic, unaryPlus)
-{
-    Matrix m = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-
-    auto m2 = +m;
-
-    for (auto r = 0; r < 3; r++)
-        for (auto c = 0; c < 3; c++)
-            GTEST_ASSERT_EQ(m[r][c], m2[r][c]);
     
     std::cout << m2;
 }
@@ -386,7 +401,8 @@ TEST(Arithmetic, multiplyNumber)
     auto m1 = m * number;
     double a[] = {20, 12, 28, 0, 28, 4, 36, 8, 12, 16, 28, 24};
 
-    auto [r_, c_] = m1.size();
+    auto r_ = m1.getRows();
+    auto c_ = m1.getColumns();
     
     std::cout << m1;
     
@@ -403,7 +419,8 @@ TEST(Arithmetic, multiplyNumberUpd)
     m *= number;
     double a[] = {20, 12, 28, 0, 28, 4, 36, 8, 12, 16, 28, 24};
 
-    auto [r_, c_] = m.size();
+    auto r_ = m.getRows();
+    auto c_ = m.getColumns();
     
     std::cout << m;
     
@@ -420,7 +437,8 @@ TEST(Redundant, multiplyNumber)
     auto m1 = m * number;
     auto m2 = m.multiplyNumber(number);
 
-    auto [r_, c_] = m1.size();
+    auto r_ = m1.getRows();
+    auto c_ = m1.getColumns();
     
     std::cout << m1;
     
@@ -438,7 +456,8 @@ TEST(Redundant, multiplyNumberUpd)
     m1 *= number;
     m.multiplyNumberUpd(number);
 
-    auto [r_, c_] = m1.size();
+    auto r_ = m1.getRows();
+    auto c_ = m1.getColumns();
     
     std::cout << m1;
     
@@ -455,7 +474,8 @@ TEST(Arithmetic, multiplyMatrix)
     auto m2 = m * m1;
     double a[] = {242, 18.9, 315.6, 25.1, 358, 27.8};
 
-    auto [r_, c_] = m2.size();
+    auto r_ = m2.getRows();
+    auto c_ = m2.getColumns();
     
     std::cout << m2;
     
@@ -472,7 +492,8 @@ TEST(Arithmetic, multiplyMatrixUpd)
     m *= m1;
     double a[] = {157.3, 11.9, 135.3, 10};
 
-    auto [r_, c_] = m.size();
+    auto r_ = m.getRows();
+    auto c_ = m.getColumns();
     
     std::cout << m;
     
@@ -491,7 +512,8 @@ TEST(Redundant, multiplyMatrixUpd)
     
     m.multiplyMatrixUpd(m1);
 
-    auto [r_, c_] = m2.size();
+    auto r_ = m2.getRows();
+    auto c_ = m2.getColumns();
     
     std::cout << m2;
     
@@ -508,7 +530,8 @@ TEST(Redundant, multiplyMatrix)
     auto m2 = m * m1;
     auto m3 = m.multiplyMatrix(m1);
 
-    auto [r_, c_] = m2.size();
+    auto r_ = m2.getRows();
+    auto c_ = m2.getColumns();
     
     std::cout << m2;
     
@@ -525,7 +548,8 @@ TEST(Arithmetic, divideNumber)
     auto m2 = m / number;
     double a[] = {5/3.0, 3/3.0, 7/3.0, 0, 7/3.0, 1/3.0, 9/3.0, 2/3.0, 1, 4/3.0, 7.0/3.0, 2};
 
-    auto [r_, c_] = m2.size();
+    auto r_ = m2.getRows();
+    auto c_ = m2.getColumns();
     
     std::cout << m2;
     
@@ -542,7 +566,8 @@ TEST(Arithmetic, divideNumberUpd)
     m /= number;
     double a[] = {5/3.0, 3/3.0, 7/3.0, 0, 7/3.0, 1/3.0, 9/3.0, 2/3.0, 1, 4/3.0, 7.0/3.0, 2};
 
-    auto [r_, c_] = m.size();
+    auto r_ = m.getRows();
+    auto c_ = m.getColumns();
     
     std::cout << m;
     
@@ -559,7 +584,8 @@ TEST(Redundant, divideNumber)
     auto m2 = m / number;
     auto m3 = m.divideNumber(number);
 
-    auto [r_, c_] = m2.size();
+    auto r_ = m2.getRows();
+    auto c_ = m2.getColumns();
     
     std::cout << m2;
     
@@ -577,7 +603,8 @@ TEST(Redundant, divideNumberUpd)
     m2 /= number;
     m.divideNumberUpd(number);
 
-    auto [r_, c_] = m.size();
+    auto r_ = m.getRows();
+    auto c_ = m.getColumns();
     
     std::cout << m;
     
@@ -588,13 +615,14 @@ TEST(Redundant, divideNumberUpd)
 
 TEST(Arithmetic, divideMatrix)
 {
-    const Matrix<double> m = {{5, 3, 7, 0}, {7, 1, 9, 2}, {3, 4, 7, 6}};
-    const Matrix<double> m1 = {{5.2, 1.2, 8.7, 1.1}, {4.3, 2.2, 7.8, 9.8}, {9, 1.8, 20, 3}};
+    const Matrix<double> m = {{5, 3}, {7, 1}};
+    const Matrix<double> m1 = {{5.2, 1.2}, {4.3, 2.2}};
 
     auto m2 = m / m1;
-    double a[] = {5/5.2, 3/1.2, 7/8.7, 0, 7/4.3, 1/2.2, 9/7.8, 2/9.8, 3.0/9, 4/1.8, 7.0/20, 6.0/3};
+    double a[] = {-95.0/314, 240.0/157, 555.0/314, -80.0/157};
 
-    auto [r_, c_] = m2.size();
+    auto r_ = m2.getRows();
+    auto c_ = m2.getColumns();
     
     std::cout << m2;
     
@@ -605,56 +633,58 @@ TEST(Arithmetic, divideMatrix)
 
 TEST(Arithmetic, divideMatrixUpd)
 {
-    Matrix<double> m = {{5, 3, 7, 0}, {7, 1, 9, 2}, {3, 4, 7, 6}};
-    const Matrix<double> m1 = {{5.2, 1.2, 8.7, 1.1}, {4.3, 2.2, 7.8, 9.8}, {9, 1.8, 20, 3}};
+    Matrix<double> m = {{5, 3, 7, 0}, {7, 1, 9, 2}, {3, 4, 7, 6}, {1, 7, 4, 2}};
+    const Matrix<double> m1 = {{5.2, 1.2, 8.7, 1.1}, {4.3, 2.2, 7.8, 9.8}, {9, 1.8, 20, 3}, {1, 9, 9, 0}};
     
+    Matrix<double> a = m / m1;
     m /= m1;
-    double a[] = {5/5.2, 3/1.2, 7/8.7, 0, 7/4.3, 1/2.2, 9/7.8, 2/9.8, 3.0/9, 4/1.8, 7.0/20, 6.0/3};
 
-    auto [r_, c_] = m.size();
+    auto r_ = m.getRows();
+    auto c_ = m.getColumns();
     
     std::cout << m;
     
     for (auto r = 0; r < r_; r++)
         for (auto c = 0; c < c_; c++)
-            ASSERT_FLOAT_EQ(a[r * c_ + c], m[r][c]);
+            ASSERT_FLOAT_EQ(a[r][c], m[r][c]);
     
 }
 
 TEST(Redundant, divideMatrixUpd)
 {
-    Matrix<double> m = {{5, 3, 7, 0}, {7, 1, 9, 2}, {3, 4, 7, 6}};
-    const Matrix<double> m1 = {{5.2, 1.2, 8.7, 1.1}, {4.3, 2.2, 7.8, 9.8}, {9, 1.8, 20, 3}};
-
-    Matrix m2(m);
-    m2 /= m1;
+    Matrix<double> m = {{5, 3, 7, 0}, {7, 1, 9, 2}, {3, 4, 7, 6}, {1, 7, 4, 2}};
+    const Matrix<double> m1 = {{5.2, 1.2, 8.7, 1.1}, {4.3, 2.2, 7.8, 9.8}, {9, 1.8, 20, 3}, {1, 9, 9, 0}};
+    
+    Matrix<double> a = m / m1;
     m.divideMatrixUpd(m1);
 
-    auto [r_, c_] = m2.size();
+    auto r_ = m.getRows();
+    auto c_ = m.getColumns();
     
-    std::cout << m2;
+    std::cout << m;
     
     for (auto r = 0; r < r_; r++)
         for (auto c = 0; c < c_; c++)
-            ASSERT_FLOAT_EQ(m[r][c], m2[r][c]);
+            ASSERT_FLOAT_EQ(a[r][c], m[r][c]);
     
 }
 
-TEST(Redundant, divideMatrix)
+TEST(Redundant, divideMatrixHadamard)
 {
     const Matrix<double> m = {{5, 3, 7, 0}, {7, 1, 9, 2}, {3, 4, 7, 6}};
     const Matrix<double> m1 = {{5.2, 1.2, 8.7, 1.1}, {4.3, 2.2, 7.8, 9.8}, {9, 1.8, 20, 3}};
 
-    auto m2 = m / m1;
-    auto m3 = m.divideMatrix(m1);
+    double m3[] = {5/5.2, 3/1.2, 7/8.7, 0, 7/4.3, 1/2.2, 9/7.8, 2/9.8, 3.0/9, 4/1.8, 7.0/20, 6.0/3};
+    auto m2 = m.divideMatrixHadamard(m1);
 
-    auto [r_, c_] = m2.size();
+    auto r_ = m2.getRows();
+    auto c_ = m2.getColumns();
     
     std::cout << m2;
     
     for (auto r = 0; r < r_; r++)
         for (auto c = 0; c < c_; c++)
-            ASSERT_FLOAT_EQ(m3[r][c], m2[r][c]);
+            ASSERT_FLOAT_EQ(m3[r * c_ + c], m2[r][c]);
     
 }
 
@@ -665,7 +695,8 @@ TEST(Arithmetic, invertMatrix)
     auto m2 = ~m;
     double a[] = {-151.0/605, 182.0/605, -83.0/605, 67.0/605, 122.0/605, -119.0/605, 31.0/605, 26.0/605, 142.0/605, -79.0/605, 46.0/605, -59.0/605, -343.0/1210, 161.0/1210, 68.0/605, 18.0/605};
 
-    auto [r_, c_] = m2.size();
+    auto r_ = m2.getRows();
+    auto c_ = m2.getColumns();
     
     std::cout << m2;
     
@@ -750,7 +781,8 @@ TEST(additionalOperation, transpose)
     
     std::cout << res;
 
-    const auto [r_, c_] = res.size();
+    auto r_ = res.getRows();
+    auto c_ = res.getColumns();
 
     for (auto r = 0; r < r_; r++)
         for (auto c = 0; c < c_; c++)
@@ -780,7 +812,8 @@ TEST(additionalOperation, submatrix)
 
     std::cout << res << std::endl;
 
-    const auto [r_, c_] = res.size();
+    auto r_ = res.getRows();
+    auto c_ = res.getColumns();
 
     for (auto r = 0; r < r_; r++)
         for (auto c = 0; c < c_; c++)
@@ -797,7 +830,26 @@ TEST(additionalOperation, swapRows)
 
     std::cout << m << std::endl;
 
-    const auto [r_, c_] = m.size();
+    auto r_ = m.getRows();
+    auto c_ = m.getColumns();
+
+    for (auto r = 0; r < r_; r++)
+        for (auto c = 0; c < c_; c++)
+            ASSERT_EQ(m[r][c], expected[r][c]);
+}
+
+TEST(additionalOperation, swapColumns)
+{
+    auto m = Matrix{{1, 0, 0}, {0, 2, 0}, {0, 0, 3}};
+
+    m.swapColumns(0, 2);
+
+    const auto expected = Matrix{{0, 0, 1}, {0, 2, 0}, {3, 0, 0}};
+
+    std::cout << m << std::endl;
+
+    auto r_ = m.getRows();
+    auto c_ = m.getColumns();
 
     for (auto r = 0; r < r_; r++)
         for (auto c = 0; c < c_; c++)
@@ -812,7 +864,8 @@ TEST(additionalOperation, fill)
 
     std::cout << m << std::endl;
 
-    const auto [r_, c_] = m.size();
+    auto r_ = m.getRows();
+    auto c_ = m.getColumns();
 
     for (auto r = 0; r < r_; r++)
         for (auto c = 0; c < c_; c++)
@@ -821,7 +874,7 @@ TEST(additionalOperation, fill)
 
 TEST(additionalOperation, LU)
 {
-    auto m = Matrix<double>{{4, 5, 2}, {2, 3, 8}, {0, 10, 12}};
+    auto m = Matrix<int>{{4, 5, 2}, {2, 3, 8}, {0, 10, 12}};
 
     const auto [L, U] = m.LU();
 
@@ -830,7 +883,8 @@ TEST(additionalOperation, LU)
     auto Lexpected = Matrix<double>{{1, 0, 0}, {0.5, 1, 0}, {0, 20, 1}};
     auto Uexpected = Matrix<double>{{4, 5, 2}, {0, 0.5, 7}, {0, 0, -128}};
 
-    const auto [r_, c_] = Lexpected.size();
+    auto r_ = Lexpected.getRows();
+    auto c_ = Lexpected.getColumns();
 
     for (auto r = 0; r < r_; r++)
         for (auto c = 0; c < c_; c++)
@@ -844,35 +898,7 @@ TEST(additionalOperation, LU)
 
 int main(int argc, char **argv)
 {
-    // testing::InitGoogleTest(&argc, argv);
-    //
-    // return RUN_ALL_TESTS();
+    testing::InitGoogleTest(&argc, argv);
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    Matrix m({{1, 2, 3}, {4, 5, 6}});
-    Matrix<double> m2({{1, 2, 3}, {4, 5, 6}});
-    
-    std::cout << m;
-    
     return RUN_ALL_TESTS();
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-    auto m = Matrix({{1, 2, 3}});
-
-    int a = 1;
-    auto m2 = m + a;
-
-    std::cout << m2;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 }
