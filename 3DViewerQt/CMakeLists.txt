@@ -1,0 +1,232 @@
+cmake_minimum_required(VERSION 3.30)
+project(3DViewerQt)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+
+include_directories(inc)
+include_directories(inc/objects)
+include_directories(inc/visitors)
+include_directories(inc/managers)
+include_directories(inc/managers/creation)
+include_directories(inc/commands)
+include_directories(inc/commands/objectsCommands)
+include_directories(inc/commands/cameraCommands)
+include_directories(inc/commands/sceneCommands)
+include_directories(inc/commands/concepts)
+include_directories(inc/facade)
+include_directories(inc/model)
+include_directories(inc/model/implementation)
+include_directories(inc/scene)
+include_directories(inc/loader)
+include_directories(inc/loader/streamLoader)
+
+include_directories(inc/loader/streamLoader/solution)
+include_directories(inc/loader/streamLoader/creators)
+include_directories(inc/loader/streamLoader/products)
+include_directories(inc/loader/sceneParser/solution)
+include_directories(inc/loader/sceneParser/creators)
+include_directories(inc/loader/sceneParser/products)
+include_directories(inc/loader/modelParser/solution)
+include_directories(inc/loader/modelParser/creators)
+include_directories(inc/loader/modelParser/products)
+include_directories(inc/loader/cameraParser/solution)
+include_directories(inc/loader/cameraParser/creators)
+include_directories(inc/loader/cameraParser/products)
+include_directories(inc/loader/builders/camera)
+include_directories(inc/loader/builders/camera/exceptions)
+include_directories(inc/loader/builders/model/directors)
+include_directories(inc/loader/builders/model/exceptions)
+include_directories(inc/loader/builders/model/builders)
+include_directories(inc/loader/builders/model)
+
+include_directories(inc/abstract-factory)
+include_directories(inc/abstract-factory/Qt)
+include_directories(inc/exceptions)
+include_directories(src/commands)
+
+include_directories(inc/matrixContainer/concepts)
+include_directories(inc/matrixContainer/exceptions)
+include_directories(inc/matrixContainer/iterators)
+include_directories(inc/matrixContainer/matrix)
+include_directories(src/matrixContainer/iterators)
+include_directories(src/matrixContainer/matrix)
+include_directories(src/ui)
+
+
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
+
+add_executable(3DViewerQt
+        src/main.cpp
+        src/managers/TransformManager.cpp
+        src/objects/Object.cpp
+        src/objects/Camera.cpp
+        src/objects/Highlight.cpp
+
+        src/matrixContainer/iterators/AbstractMatrixIterator.cpp
+        src/matrixContainer/matrix/Matrix.hpp
+        inc/commands/objectsCommands/RotateCommand.h
+        inc/facade/Facade.h
+        src/facade/Facade.cpp
+        inc/model/Model.h
+        inc/model/Implementation/EdgeListModelImplementation.h
+        inc/model/Edge.h
+        inc/model/Point.h
+        src/model/Point.cpp
+        src/model/Edge.cpp
+        src/model/EdgeListModelImplementation.cpp
+        inc/model/implementation/MatrixModelImplementation.h
+        src/model/MatrixModelImplementation.cpp
+        inc/model/PlainCamera.h
+        inc/model/implementation/PlainCameraImplementation.h
+        src/model/PlainCameraImplementation.cpp
+        inc/scene/AbstractScene.h
+        inc/scene/Scene.h
+        src/scene/Scene.cpp
+        inc/managers/SceneManager.h
+        src/managers/SceneManager.cpp
+        inc/managers/SelectManager.h
+        src/managers/SelectManager.cpp
+        inc/visitors/TransformVisitor.h
+        src/visitors/TransformVisitor.cpp
+        inc/visitors/RenderVisitor.h
+        src/visitors/RenderVisitor.cpp
+        inc/abstract-factory/AbstractFactoryRenderer.h
+        inc/abstract-factory/AbstractPainter.h
+        inc/abstract-factory/AbstractPen.h
+        inc/abstract-factory/AbstractColor.h
+        inc/abstract-factory/Qt/QtColor.h
+        src/abstract-factory/Qt/QtColor.cpp
+        inc/abstract-factory/Qt/QtPen.h
+        src/abstract-factory/Qt/QtPen.cpp
+        inc/abstract-factory/Qt/QtPainter.h
+        src/abstract-factory/Qt/QtPainter.cpp
+        inc/abstract-factory/Qt/QtFactoryRenderer.h
+        src/abstract-factory/Qt/QtFactoryRenderer.cpp
+        inc/managers/RenderManager.h
+        src/managers/RenderManager.cpp
+        inc/managers/creation/ManagerSolution.h
+        inc/managers/creation/AbstractManagerCreator.h
+        src/managers/creation/ManagerSolution.cpp
+        inc/managers/creation/SelectManagerCreator.h
+        inc/managers/creation/SceneManagerCreator.h
+        inc/managers/creation/LoadManagerCreator.h
+        inc/managers/LoadManager.h
+        inc/managers/creation/RenderManagerCreator.h
+        inc/managers/creation/TransformManagerCreator.h
+        inc/managers/creation/CreatorManagerCreator.h
+        inc/managers/SceneElementsManager.h
+        inc/managers/creation/SceneElementsManagerCreator.h
+        src/managers/SceneElementsManager.cpp
+        src/managers/LoadManager.cpp
+        inc/commands/cameraCommands/SetActiveCameraCommand.h
+        src/objects/AbstractObject.cpp
+        inc/loader/SceneLoader.h
+        src/loader/SceneLoader.cpp
+        inc/loader/streamLoader/AbstractStreamLoader.h
+        inc/loader/streamLoader/StreamFileLoader.h
+        src/loader/streamLoader/StreamFileLoader.cpp
+        inc/loader/streamLoader/solution/FileLoaderSolution.h
+        inc/loader/streamLoader/creators/AbstractFileLoaderCreator.h
+        inc/loader/streamLoader/products/AbstractFileLoader.h
+        inc/loader/streamLoader/creators/FileLoaderCSVCreator.h
+        inc/loader/streamLoader/creators/FileLoaderTXTCreator.h
+        inc/loader/streamLoader/products/FileLoaderCSV.h
+        inc/loader/streamLoader/products/FileLoaderTXT.h
+        src/loader/streamLoader/FileLoaderCSV.cpp
+        src/loader/streamLoader/FileLoaderTXT.cpp
+        inc/loader/sceneParser/solution/SceneParserSolution.h
+        inc/loader/sceneParser/creators/AbstractSceneParserCreator.h
+        inc/loader/sceneParser/creators/SceneParserCSVCreator.h
+        inc/loader/sceneParser/creators/SceneParserTXTCreator.h
+        inc/loader/sceneParser/products/AbstractSceneParser.h
+        inc/loader/sceneParser/products/SceneParserCSV.h
+        inc/loader/sceneParser/products/SceneParserTXT.h
+        src/loader/sceneParser/SceneParserCSV.cpp
+        src/loader/sceneParser/SceneParserTXT.cpp
+        inc/loader/modelParser/solution/ModelParserSolution.h
+        inc/loader/modelParser/creators/AbstractModelParserCreator.h
+        inc/loader/modelParser/creators/ModelParserCSVCreator.h
+        inc/loader/modelParser/creators/ModelParserTXTCreator.h
+        inc/loader/modelParser/products/AbstractModelParser.h
+        inc/loader/modelParser/products/ModelParserCSV.h
+        inc/loader/modelParser/products/ModelParserTXT.h
+        src/loader/modelParser/ModelParserTXT.cpp
+        src/loader/modelParser/ModelParserCSV.cpp
+        src/loader/modelParser/AbstractModelParser.cpp
+        src/loader/sceneParser/AbstractSceneParser.cpp
+        src/loader/streamLoader/AbstractStreamLoader.cpp
+        src/loader/streamLoader/AbstractFileLoader.cpp
+        inc/loader/cameraParser/solution/CameraParserSolution.h
+        inc/loader/cameraParser/creators/AbstractCameraParserCreator.h
+        inc/loader/cameraParser/creators/CameraParserCSVCreator.h
+        inc/loader/cameraParser/creators/CameraParserTXTCreator.h
+        inc/loader/cameraParser/products/AbstractCameraParser.h
+        inc/loader/cameraParser/products/CameraParserCSV.h
+        inc/loader/cameraParser/products/CameraParserTXT.h
+        src/loader/cameraParser/AbstractCameraParser.cpp
+        src/loader/cameraParser/AbstractCameraParserCreator.cpp
+        src/loader/cameraParser/CameraParserTXT.cpp
+        src/loader/cameraParser/CameraParserCSV.cpp
+        src/loader/modelParser/AbstractModelParserCreator.cpp
+        src/loader/sceneParser/AbstractSceneParserCreator.cpp
+        src/loader/streamLoader/AbstractFileLoaderCreator.cpp
+        inc/loader/builders/model/ModelBuilderDirectorSolution.h
+        src/loader/ObjectSelector.cpp
+        inc/loader/ObjectSelector.h
+        inc/loader/enums.h
+        inc/loader/builders/model/directors/AbstractModelDirector.h
+        inc/loader/builders/model/directors/MatrixModelDirector.h
+        src/loader/builders/model/directors/AbstractModelDirector.cpp
+        inc/loader/builders/model/builders/MatrixModelBuilder.h
+        inc/loader/builders/model/builders/EdgeListModelBuilder.h
+        inc/loader/builders/model/directors/EdgeListModelDirector.h
+        src/loader/builders/model/directors/EdgeListModelDirector.cpp
+        src/loader/builders/model/directors/MatrixModelDirector.cpp
+        src/loader/builders/model/builders/MatrixModelBuilder.cpp
+        src/loader/builders/model/builders/EdgeListModelBuilder.cpp
+        inc/loader/builders/model/builders/AbstractModelBuilder.h
+        src/loader/builders/model/builders/AbstractModelBuilder.cpp
+        inc/loader/builders/camera/CameraDirector.h
+        inc/loader/builders/camera/CameraBuilder.h
+        src/loader/builders/camera/CameraBuilder.cpp
+        src/loader/builders/camera/CameraDirector.cpp
+        src/ui/MainWindow.cpp
+        src/abstract-factory/AbstractFactoryRenderer.cpp
+        src/abstract-factory/AbstractColor.cpp
+        src/abstract-factory/AbstractPainter.cpp
+        src/abstract-factory/AbstractPen.cpp
+        src/commands/AbstractCommand.cpp
+        src/managers/AbstractManager.cpp
+        src/managers/creation/AbstractManagerCreator.cpp
+        src/scene/AbstractScene.cpp
+        src/visitors/AbstractVisitor.cpp
+        inc/loader/cameraParser/creators/CreatorAbstractCameraParserCreator.h
+        src/loader/modelParser/ModelParserSolution.cpp
+        src/loader/cameraParser/CameraParserSolution.cpp
+        src/loader/sceneParser/SceneParserSolution.cpp
+        inc/loader/streamLoader/creators/CreatorAbstractFileLoaderCreator.h
+        src/loader/streamLoader/FileLoaderSolution.cpp
+        src/loader/builders/model/ModelBuilderDirectorSolution.cpp
+        inc/loader/builders/model/CreatorModelBuilderDirector.h
+        src/ui/transformationConstants.h
+        inc/model/implementation/AbstractModelImplementation.h
+        src/model/AbstractModelImplementation.cpp
+        src/model/Model.cpp
+        inc/visitors/ProjectionVisitor.h
+        src/visitors/ProjectionVisitor.cpp
+        inc/loader/builders/model/ModelBuilderExceptions.h
+        inc/exceptions/SolutionExceptions.h
+        inc/exceptions/NotImplementedException.h
+        inc/loader/cameraParser/CameraParserExceptions.h
+        inc/exceptions/InvalidStreamException.h
+        inc/loader/modelParser/ModelParserExceptions.h
+        inc/loader/streamLoader/FileLoaderExceptions.h
+        inc/managers/ManagerExceptions.h
+)
+
+target_link_libraries(3DViewerQt PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets)
