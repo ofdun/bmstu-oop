@@ -4,11 +4,12 @@
 
 Controller::Controller(QObject *parent) : QObject(parent)
 {
-    connect(this, &Controller::targetReached, this, &Controller::handleStanding);
-    connect(this, &Controller::newTargetAdded, this, &Controller::handleMove);
-    connect(this, &Controller::noTarget, this, &Controller::wait);
-    connect(this, &Controller::moveToNewTarget, this, &Controller::handleMove);
+    connect(this, &Controller::signalTargetReached, this, &Controller::handleStanding);
+    connect(this, &Controller::signalNewTargetAdded, this, &Controller::handleMove);
+    connect(this, &Controller::signalNoTarget, this, &Controller::wait);
+    connect(this, &Controller::signalMoveToNewTarget, this, &Controller::handleMove);
     _state = WAITING;
+    _direction = UP;
 }
 
 void Controller::wait()
@@ -25,6 +26,12 @@ void Controller::handleMove()
     if (_state != HANDLE_MOVING && _state != NEW_CALL && _state != HANDLE_STANDING)
         return;
 
+    if (_state == HANDLE_MOVING)
+    {
+        _curFloor += _direction;
+        emit signalOnFloor(_curFloor);
+    }
+
     std::cout << "Очередь: ";
     for (const auto &a : _toProcess)
         std::cout << a << ' ';
@@ -38,26 +45,21 @@ void Controller::handleMove()
             _direction = DOWN;
         else if (_curFloor < _toProcess.front() && _direction == DOWN)
             _direction = UP;
-        else
-            _direction = _curFloor <= _toProcess.front() ? UP : DOWN;
     }
     
     if (_toProcess.empty())
     {
         std::cout << "У контроллера нет целей\n";
-        emit noTarget();
+        emit signalNoTarget();
     }
     else
     {
         if (_curFloor == _toProcess.front())
-            emit targetReached();
+            emit signalTargetReached();
         else
         {
             std::cout << "Лифт едет с " << _curFloor << " этажа на " << _curFloor + _direction << " этаж\n";
-            _curFloor += _direction;
-            emit onFloor(_curFloor);
-            
-            emit moveCabin();
+            emit signalMoveCabin();
         }
     }
 }
@@ -71,28 +73,17 @@ void Controller::handleStanding()
     _state = HANDLE_STANDING;
 
     if (_toProcess.empty())
-        emit noTarget();
+        emit signalNoTarget();
     else if (_curFloor == _toProcess.front())
     {
-        // std::cout << "Текущая очередь: ";
-        // for (const auto &v : _toProcess)
-        //     std::cout << v << ' ';
-        // std::cout << std::endl;
-        // std::cout << "Current state: " << was << std::endl;
         _toProcess.pop_front();
-        // if (was == HANDLE_MOVING)
-        // {
-        //     std::cout << "Лифт прибыл на " << _curFloor << " этаж\n";
         if (was == HANDLE_MOVING)
-            emit stopCabin();
+            emit signalStopCabin();
         else
-            emit openCabin();
-        // }
-        // else
-        //     emit openCabin();
+            emit signalOpenCabin();
     }
     else
-        emit moveToNewTarget();
+        emit signalMoveToNewTarget();
     
 }
 
@@ -103,9 +94,9 @@ void Controller::handleNewElevatorCall(int floor)
     
     insertFloorToProcess(floor);
     if (_curFloor == floor)
-        emit targetReached();
+        emit signalTargetReached();
     else if (was == WAITING)
-        emit newTargetAdded();
+        emit signalNewTargetAdded();
 }
 
 void Controller::insertFloorToProcess(int floor)
@@ -119,8 +110,8 @@ void Controller::insertFloorToProcess(int floor)
     auto dir = _direction;
 
     std::sort(_toProcess.begin(), _toProcess.end(), [cur, dir](const auto &a, const auto &b) -> bool {
-        bool aGreater = a >= cur;
-        bool bGreater = b >= cur;
+        bool aGreater = a > cur;
+        bool bGreater = b > cur;
 
         if (aGreater != bGreater)
             return dir == UP ? aGreater : !aGreater;

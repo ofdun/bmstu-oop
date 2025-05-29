@@ -3,6 +3,7 @@
 
 #include "Elevator.h"
 
+#include <QPushButton>
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -48,6 +49,7 @@ private slots:
     void on_elevatorButton10_clicked();
 
 private:
+    std::unordered_map<int, QPushButton *> buttons;
 
     Elevator _elevator;
     Ui::MainWindow *ui = nullptr;

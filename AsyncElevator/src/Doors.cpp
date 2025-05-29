@@ -18,7 +18,7 @@ void Doors::close()
 
     _state = CLOSED;
     std::cout << "Двери закрыты\n";
-    emit closed();
+    emit signalClosed();
 }
 
 void Doors::closing()

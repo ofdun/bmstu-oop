@@ -11,16 +11,16 @@ public:
     ~Controller() override = default;
 
 signals:
-    void targetReached();
-    void moveToNewTarget();
-    void newTargetAdded();
-    void noTarget();
+    void signalTargetReached();
+    void signalMoveToNewTarget();
+    void signalNewTargetAdded();
+    void signalNoTarget();
     
-    void moveCabin();
-    void stopCabin();
-    void openCabin();
+    void signalMoveCabin();
+    void signalStopCabin();
+    void signalOpenCabin();
 
-    void onFloor(int floor); // для ui
+    void signalOnFloor(int floor); // для ui
     
 public slots:
     void wait(); // KO1

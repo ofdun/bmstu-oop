@@ -4,10 +4,9 @@
 
 Cabin::Cabin(QObject *parent) : QObject(parent)
 {
-    connect(this, &Cabin::cabinStopped, &_doors, &Doors::opening);
-    connect(&_doors, &Doors::closed, this, &Cabin::readyToMove);
+    connect(this, &Cabin::signalCabinStopped, &_doors, &Doors::opening);
+    connect(&_doors, &Doors::signalClosed, this, &Cabin::readyToMove);
     
-    connect(&_movingTimer, &QTimer::timeout, this, &Cabin::cabinMoved);
     connect(&_stoppingTimer, &QTimer::timeout, this, &Cabin::stopped);
     _state = READY_TO_MOVE;
 }
@@ -47,7 +46,7 @@ void Cabin::stopped()
     
     std::cout << "Кабина готова к загрузке/разгрузке\n";
     
-    emit cabinStopped();
+    emit signalCabinStopped();
 }
 
 void Cabin::readyToMove()
@@ -58,5 +57,5 @@ void Cabin::readyToMove()
     _state = READY_TO_MOVE;
     std::cout << "Кабина готова к движению\n";
 
-    emit SignalReadyToMove();
+    emit signalReadyToMove();
 }

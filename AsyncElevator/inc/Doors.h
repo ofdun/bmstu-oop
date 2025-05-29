@@ -16,7 +16,7 @@ public:
     ~Doors() override = default;
 
 signals:
-    void closed();
+    void signalClosed();
 
 public slots:
     void close(); // Д1

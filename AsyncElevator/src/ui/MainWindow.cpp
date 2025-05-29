@@ -4,26 +4,13 @@
 
 #include "ui_MainWindow.h"
 
-#define GREEN_BUTTON_STYLESHEET "background-color: green;"
-
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    connect(this, &MainWindow::buttonPressedSignal, &_elevator, &Elevator::newCall);
-    connect(&_elevator._controller, &Controller::onFloor, this, &MainWindow::onFloor);
+    connect(this, &MainWindow::buttonPressedSignal, &_elevator, &Elevator::signalNewCall);
+    connect(&_elevator._controller, &Controller::signalOnFloor, this, &MainWindow::onFloor);
 
-    auto size = ui->floor1->sizeHint();
-    ui->floor1->setStyleSheet(GREEN_BUTTON_STYLESHEET);
-    ui->floor1->setFixedSize(size);
-}
-
-MainWindow::~MainWindow() {
-  delete ui;
-}
-
-void MainWindow::onFloor(int floor)
-{
-    static std::unordered_map<int, QPushButton *> mp {
+    buttons = {
         {1, ui->floor1},
         {2, ui->floor2},
         {3, ui->floor3},
@@ -35,15 +22,49 @@ void MainWindow::onFloor(int floor)
         {9, ui->floor9},
         {10, ui->floor10},
     };
-    
-    if (mp.contains(floor - 1))
-        mp[floor - 1]->setStyleSheet("");
-    if (mp.contains(floor + 1))
-        mp[floor + 1]->setStyleSheet("");
 
-    auto size = ui->floor1->sizeHint();
-    mp[floor]->setStyleSheet(GREEN_BUTTON_STYLESHEET);
-    mp[floor]->setFixedSize(size);
+    
+    for (const auto &it : buttons)
+    {
+        auto pal = it.second->palette();
+        if (it.first == 1)
+            pal.setColor(QPalette::Button, QColor(Qt::green));
+        else
+            pal.setColor(QPalette::Button, QColor(Qt::gray));
+        it.second->setAutoFillBackground(true);
+        it.second->setPalette(pal);
+        it.second->update();
+    }
+}
+
+MainWindow::~MainWindow() {
+  delete ui;
+}
+
+void MainWindow::onFloor(int floor)
+{
+    if (buttons.contains(floor - 1))
+    {
+        auto pal = buttons[floor - 1]->palette();
+        pal.setColor(QPalette::Button, QColor(Qt::gray));
+        buttons[floor - 1]->setAutoFillBackground(true);
+        buttons[floor - 1]->setPalette(pal);
+        buttons[floor - 1]->update();
+    }
+    if (buttons.contains(floor + 1))
+    {
+        auto pal = buttons[floor + 1]->palette();
+        pal.setColor(QPalette::Button, QColor(Qt::gray));
+        buttons[floor + 1]->setAutoFillBackground(true);
+        buttons[floor + 1]->setPalette(pal);
+        buttons[floor + 1]->update();
+    }
+
+    auto pal = buttons[floor]->palette();
+    pal.setColor(QPalette::Button, QColor(Qt::green));
+    buttons[floor]->setAutoFillBackground(true);
+    buttons[floor]->setPalette(pal);
+    buttons[floor]->update();
 }
 
 void MainWindow::onButtonPressed(int floor)

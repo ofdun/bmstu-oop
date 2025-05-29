@@ -10,15 +10,16 @@ class Cabin : public QObject
     static constexpr int MOVING_TIMER_TIME = 1000;
     static constexpr int STOPPING_TIMER_TIME = 500;
 
+
+    friend class Elevator;
+
 public:
     explicit Cabin(QObject *parent = nullptr);
     ~Cabin() override = default;
 
 signals:
-    void SignalReadyToMove();
-    void openDoors();
-    void cabinMoved();
-    void cabinStopped();
+    void signalReadyToMove();
+    void signalCabinStopped();
 
 public slots:
     void move(); // KA1

@@ -15,7 +15,7 @@ public:
     explicit Elevator(QObject *object = nullptr);
     
 signals:
-    void newCall(int floor);
+    void signalNewCall(int floor);
 
 public slots:
     void call(int floor);
