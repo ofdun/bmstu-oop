@@ -1,6 +1,8 @@
 #pragma once
 #include <QObject>
 
+#include "Floor.h"
+
 class Controller : public QObject
 {
     Q_OBJECT
@@ -20,22 +22,18 @@ signals:
     void signalStopCabin();
     void signalOpenCabin();
 
-    void signalOnFloor(int floor); // для ui
+    void signalOnFloor(Floor floor); // для ui
     
 public slots:
     void wait(); // KO1
     void handleMove(); // KO2
     void handleStanding(); // KO3
-    void handleNewElevatorCall(int floor); // KO4
+    void handleNewElevatorCall(Floor floor); // KO4
 
 private:
-    void insertFloorToProcess(int floor);
+    void insertFloorToProcess(Floor floor);
 
-    enum Direction
-    {
-        UP = 1,
-        DOWN = -1,
-    };
+    using SortingFunction = std::function<bool(const Floor &, const Floor &)>;
     
     enum State
     {
@@ -48,5 +46,6 @@ private:
     int _curFloor = STARTING_FLOOR;
     State _state;
     Direction _direction;
-    std::deque<int> _toProcess;
+    std::deque<Floor> _toProcess;
+    SortingFunction _sortingFunction;
 };

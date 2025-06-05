@@ -23,6 +23,7 @@ add_executable(${APP_NAME} src/main.cpp
         src/Elevator.cpp
         inc/Elevator.h
         src/ui/MainWindow.hpp
-        src/ui/MainWindow.cpp)
+        src/ui/MainWindow.cpp
+        inc/Floor.h)
 
 target_link_libraries(${APP_NAME} PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets)
