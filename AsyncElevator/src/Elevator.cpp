@@ -1,5 +1,7 @@
 #include "Elevator.h"
 
+#include "Floor.h"
+
 Elevator::Elevator(QObject *object) : QObject(object)
 {
     connect(this, &Elevator::signalNewCall, &_controller, &Controller::handleNewElevatorCall);
@@ -10,7 +12,7 @@ Elevator::Elevator(QObject *object) : QObject(object)
     connect(&_cabin, &Cabin::signalReadyToMove, &_controller, &Controller::handleMove);
 }
 
-void Elevator::call(int floor)
+void Elevator::call(Floor floor)
 {
     emit signalNewCall(floor);
 }

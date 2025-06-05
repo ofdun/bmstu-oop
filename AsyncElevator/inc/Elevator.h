@@ -5,6 +5,8 @@
 #include "Controller.h"
 #include "Cabin.h"
 
+#include "Floor.h"
+
 class Elevator : public QObject
 {
     Q_OBJECT
@@ -15,10 +17,10 @@ public:
     explicit Elevator(QObject *object = nullptr);
     
 signals:
-    void signalNewCall(int floor);
+    void signalNewCall(Floor floor);
 
 public slots:
-    void call(int floor);
+    void call(Floor floor);
 
 private:
     Controller _controller;

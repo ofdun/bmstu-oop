@@ -20,22 +20,31 @@ public:
     ~MainWindow() override;
 
 signals:
-    void buttonPressedSignal(int floor);
+    void buttonPressedSignal(Floor floor);
 
 private slots:
-    void onFloor(int floor);
-    void onButtonPressed(int floor);
-    
-    void on_floorButton1_clicked();
-    void on_floorButton2_clicked();
-    void on_floorButton3_clicked();
-    void on_floorButton4_clicked();
-    void on_floorButton5_clicked();
-    void on_floorButton6_clicked();
-    void on_floorButton7_clicked();
-    void on_floorButton8_clicked();
-    void on_floorButton9_clicked();
-    void on_floorButton10_clicked();
+    void onFloor(Floor floor);
+    void onButtonPressed(Floor floor);
+
+    void on_floorButton10Down_clicked();
+    void on_floorButton9Down_clicked();
+    void on_floorButton8Down_clicked();
+    void on_floorButton7Down_clicked();
+    void on_floorButton6Down_clicked();
+    void on_floorButton5Down_clicked();
+    void on_floorButton4Down_clicked();
+    void on_floorButton3Down_clicked();
+    void on_floorButton2Down_clicked();
+
+    void on_floorButton9Up_clicked();
+    void on_floorButton8Up_clicked();
+    void on_floorButton7Up_clicked();
+    void on_floorButton6Up_clicked();
+    void on_floorButton5Up_clicked();
+    void on_floorButton4Up_clicked();
+    void on_floorButton3Up_clicked();
+    void on_floorButton2Up_clicked();
+    void on_floorButton1Up_clicked();
     
     void on_elevatorButton1_clicked();
     void on_elevatorButton2_clicked();

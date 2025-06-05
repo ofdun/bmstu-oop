@@ -1,5 +1,7 @@
 #include "Controller.h"
 
+#include "Floor.h"
+
 #include <iostream>
 
 Controller::Controller(QObject *parent) : QObject(parent)
@@ -10,6 +12,32 @@ Controller::Controller(QObject *parent) : QObject(parent)
     connect(this, &Controller::signalMoveToNewTarget, this, &Controller::handleMove);
     _state = WAITING;
     _direction = UP;
+
+    _sortingFunction = [this](const Floor &a, const Floor &b) -> bool {
+        auto aDir = a.direction == NONE ? _direction : a.direction;
+        auto bDir = b.direction == NONE ? _direction : b.direction;
+        
+        if (aDir != bDir)
+            return aDir == _direction;
+        
+        bool aGreater = a.floor > _curFloor;
+        bool bGreater = b.floor > _curFloor;
+
+        if (aGreater != bGreater)
+            return _direction == UP ? aGreater : !aGreater;
+
+        if (aDir == UP)
+        {
+            if (aGreater)
+                return a.floor < b.floor;
+            return a.floor > b.floor;
+        } else
+        {
+            if (aGreater)
+                return a.floor > b.floor;
+            return a.floor < b.floor;
+        }
+    };
 }
 
 void Controller::wait()
@@ -26,26 +54,34 @@ void Controller::handleMove()
     if (_state != HANDLE_MOVING && _state != NEW_CALL && _state != HANDLE_STANDING)
         return;
 
-    if (_state == HANDLE_MOVING)
-    {
-        _curFloor += _direction;
-        emit signalOnFloor(_curFloor);
-    }
-
-    std::cout << "Очередь: ";
-    for (const auto &a : _toProcess)
-        std::cout << a << ' ';
-    std::cout << std::endl;
-
+    auto was = _state;
     _state = HANDLE_MOVING;
 
     if (!_toProcess.empty())
     {
-        if (_curFloor > _toProcess.front() && _direction == UP)
+        if (_curFloor > _toProcess.front().floor && _direction == UP)
+        {
             _direction = DOWN;
-        else if (_curFloor < _toProcess.front() && _direction == DOWN)
+            std::ranges::sort(_toProcess, _sortingFunction);
+        }
+        else if (_curFloor < _toProcess.front().floor && _direction == DOWN)
+        {
             _direction = UP;
+            std::ranges::sort(_toProcess, _sortingFunction);
+        }
     }
+
+    if (was == HANDLE_MOVING || was == NEW_CALL)
+    {
+        _curFloor += _direction;
+        emit signalOnFloor({_curFloor, NONE});
+    }
+    
+    std::cout << "Очередь: ";
+    for (const auto &a : _toProcess)
+        std::cout << a.floor << ' ';
+    std::cout << std::endl;
+
     
     if (_toProcess.empty())
     {
@@ -54,7 +90,7 @@ void Controller::handleMove()
     }
     else
     {
-        if (_curFloor == _toProcess.front())
+        if (_curFloor == _toProcess.front().floor)
             emit signalTargetReached();
         else
         {
@@ -74,9 +110,11 @@ void Controller::handleStanding()
 
     if (_toProcess.empty())
         emit signalNoTarget();
-    else if (_curFloor == _toProcess.front())
+    else if (_curFloor == _toProcess.front().floor)
     {
-        _toProcess.pop_front();
+        while (!_toProcess.empty() && _curFloor == _toProcess.front().floor)
+            _toProcess.pop_front();
+        
         if (was == HANDLE_MOVING)
             emit signalStopCabin();
         else
@@ -87,37 +125,24 @@ void Controller::handleStanding()
     
 }
 
-void Controller::handleNewElevatorCall(int floor)
+void Controller::handleNewElevatorCall(Floor floor)
 {
     auto was = _state;
     _state = NEW_CALL;
     
     insertFloorToProcess(floor);
-    if (_curFloor == floor)
+    if (_curFloor == floor.floor)
         emit signalTargetReached();
     else if (was == WAITING)
         emit signalNewTargetAdded();
 }
 
-void Controller::insertFloorToProcess(int floor)
+void Controller::insertFloorToProcess(Floor floor)
 {
     if (std::ranges::find_if(_toProcess.begin(), _toProcess.end(),
-        [floor](const auto &a){ return a == floor; }) != _toProcess.end())
+        [floor](const auto &a){ return a.floor == floor.floor && a.direction == floor.direction; }) != _toProcess.end())
         return;
     
     _toProcess.push_back(floor);
-    auto cur = _curFloor;
-    auto dir = _direction;
-
-    std::sort(_toProcess.begin(), _toProcess.end(), [cur, dir](const auto &a, const auto &b) -> bool {
-        bool aGreater = a > cur;
-        bool bGreater = b > cur;
-
-        if (aGreater != bGreater)
-            return dir == UP ? aGreater : !aGreater;
-
-        if (aGreater)
-            return a < b;
-        return a > b;
-    });
+    std::ranges::sort(_toProcess, _sortingFunction);
 }
